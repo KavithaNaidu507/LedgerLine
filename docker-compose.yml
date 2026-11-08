@@ -1,0 +1,13 @@
+# OPTIONAL: PostgreSQL in Docker (skip if you installed PostgreSQL normally).
+# Usage (PowerShell):  $env:DB_PASSWORD="choose-a-password"; docker compose up -d
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ledgerline
+    ports: ["5432:5432"]
+    volumes: [ledgerline_data:/var/lib/postgresql/data]
+volumes:
+  ledgerline_data:
