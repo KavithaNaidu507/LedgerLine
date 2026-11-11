@@ -2,11 +2,12 @@
 const KEY = 'ledgerline_token';
 export const getToken = () => sessionStorage.getItem(KEY);
 export const setToken = (t) => (t ? sessionStorage.setItem(KEY, t) : sessionStorage.removeItem(KEY));
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
 
 /** Returns { data, replayed }. Throws Error with .status and .code on failure. */
 export async function api(path, { method = 'GET', body, headers = {} } = {}) {
   const token = getToken();
-  const res = await fetch('/api' + path, {
+  const res = await fetch(API_BASE + '/api' + path, {
     method,
     headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...headers },
     body: body ? JSON.stringify(body) : undefined,

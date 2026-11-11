@@ -1,7 +1,8 @@
 package com.ledgerline.security;
 
-import com.ledgerline.repo.UserRepository;
+import java.util.Arrays;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.ledgerline.repo.UserRepository;
 
 @Configuration
 @EnableMethodSecurity   // enables @PreAuthorize on controller methods
@@ -53,7 +56,11 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource(@Value("${ledgerline.cors.origin}") String origin) {
         CorsConfiguration cfg = new CorsConfiguration();
-        cfg.setAllowedOrigins(List.of(origin));
+        cfg.setAllowedOrigins(
+    Arrays.stream(origin.split(","))
+        .map(String::trim)
+        .toList()
+);
         cfg.setAllowedMethods(List.of("GET", "POST", "PATCH", "OPTIONS"));
         cfg.setAllowedHeaders(List.of("Authorization", "Content-Type", "Idempotency-Key"));
         cfg.setExposedHeaders(List.of("Idempotent-Replay"));
